@@ -2,12 +2,7 @@ import subprocess
 
 
 def install_packages():
-    packages = [
-        "playwright",
-        "recognizer",
-        "botright",
-        "asyncio"
-    ]
+    packages = ["playwright", "recognizer", "botright", "asyncio"]
     try:
         subprocess.run(["pip", "install", "--upgrade", "pip"], check=True)
         print("Successfully upgraded pip")

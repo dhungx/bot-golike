@@ -26,9 +26,7 @@ async def check_captcha_visible(page):
 
 async def main():
     async with async_playwright() as p:
-        browser = await p.webkit.launch(
-            headless=True
-        )
+        browser = await p.webkit.launch(headless=True)
         ctx = await browser.new_context(viewport={"width": 460, "height": 667})
         page = await ctx.new_page()
 
@@ -37,7 +35,7 @@ async def main():
             sys.exit(1)
         username = sys.argv[1]
         password = sys.argv[2]
- 
+
         for __ in range(3):
             try:
                 print("access login")
@@ -98,7 +96,6 @@ async def main():
 
             except Exception as e:
                 print(f"Error occurred: {e}")
-                
 
         await browser.close()
 

@@ -14,7 +14,7 @@ def run(playwright: Playwright) -> None:
         locale="de-DE",
         timezone_id="Europe/Berlin",
     )
-    
+
     page = context.new_page()
     page.goto("https://httpbin.org/ip")
     html_content = page.content()
