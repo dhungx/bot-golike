@@ -26,16 +26,26 @@ async def check_captcha_visible(page):
 
 async def main():
     async with async_playwright() as p:
-        browser = await p.webkit.launch(headless=True)
-        ctx = await browser.new_context(viewport={"width": 460, "height": 667})
-        page = await ctx.new_page()
 
         if len(sys.argv) != 3:
-            print("Usage: python3 run_bot.py [username] [password]")
+            print("Usage: python3 shopee.py [username] [password] [proxy]")
             sys.exit(1)
         username = sys.argv[1]
         password = sys.argv[2]
+        proxy = sys.argv[3] if len(sys.argv) == 4 else None
 
+        if proxy:
+            browser = await p.webkit.launch(headless=False,proxy={
+                'server':proxy
+            })
+        else:
+            browser = await p.webkit.launch(headless=False)
+        ctx = await browser.new_context(viewport={"width": 460, "height": 667})
+        page = await ctx.new_page()
+
+        
+
+        challenger = AsyncChallenger(page)
         for __ in range(3):
             try:
                 print("access login")
@@ -46,7 +56,7 @@ async def main():
                 await page.locator('input[type="password"]').fill(password)
                 await page.locator('input[type="password"]').press("Enter")
 
-                challenger = AsyncChallenger(page)
+                
 
                 if challenger.check_captcha_visible:
                     print("recapcha ....")
@@ -73,7 +83,10 @@ async def main():
                 print("load page")
                 await page.wait_for_timeout(5000)
                 await page.goto("https://app.golike.net/jobs/shopee")
+                
+                await page.wait_for_load_state("networkidle")
                 await page.wait_for_timeout(2000)
+                print('apply job')
                 await page.get_by_text("Nhận Job ngay").click()
                 await page.wait_for_timeout(2000)
 
@@ -88,7 +101,6 @@ async def main():
                 await page.get_by_role("button", name="Hoàn thành").click()
 
                 print("recapcha ....")
-                challenger = AsyncChallenger(page)
                 await page.wait_for_timeout(2000)
                 await challenger.solve_recaptcha()
                 print("success job")
