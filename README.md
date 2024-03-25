@@ -12,13 +12,13 @@ Before you start, ensure you have the following prerequisites installed on your 
 1. **Clone the repository to your local machine:**
 
     ```bash
-    git clone https://github.com/giauphan/recapcha-google-audio.git
+    git clone https://github.com/giauphan/bot-golike.git
     ```
 
 2. **Navigate to the project directory:**
 
     ```bash
-    cd recapcha-google-audio
+    cd bot-golike
     ```
 
 3. **Create a virtual environment (optional but recommended):**
@@ -47,26 +47,15 @@ Before you start, ensure you have the following prerequisites installed on your 
     pip install -r requirements.txt
     ```
 
-## Configuration
-
-1. **Create a `.env` file in the project root and set the required environment variables. Example:**
-
-    ```plaintext
-    url_bcdn=https://example.com
-    url_find_bcdn=https://example.com
-    ```
-
-    Update the URLs based on your specific requirements.
-
 ## Running the Script
 
-1. **Run the script:**
+1. **Run the bot golike shoppe :**
 
     ```bash
-    python3 capcha.py
+    python3 shoppe.py
     ```
 
-    Replace `capcha.py` with the name of the script you want to execute.
+    Replace `shoppe.py` with the name of the script you want to execute.
 
 2. **Follow the on-screen instructions and observe the output.**
 
@@ -76,3 +65,4 @@ When you're done, deactivate the virtual environment:
 
 ```bash
 deactivate
+```
