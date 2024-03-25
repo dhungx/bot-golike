@@ -45,6 +45,7 @@ Before you start, ensure you have the following prerequisites installed on your 
 
     ```bash
     pip install -r requirements.txt
+    playwright install
     ```
 
 ## Running the Script
