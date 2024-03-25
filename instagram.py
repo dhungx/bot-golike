@@ -46,7 +46,7 @@ async def main():
         for __ in range(3):
             try:
                 print("access login")
-                
+
                 await page.goto("https://app.golike.net/login")
                 await page.wait_for_timeout(2000)
                 await page.locator('input[type="text"]').click()

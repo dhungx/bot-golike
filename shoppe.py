@@ -35,15 +35,11 @@ async def main():
         proxy = sys.argv[3] if len(sys.argv) == 4 else None
 
         if proxy:
-            browser = await p.webkit.launch(headless=False,proxy={
-                'server':proxy
-            })
+            browser = await p.webkit.launch(headless=False, proxy={"server": proxy})
         else:
             browser = await p.webkit.launch(headless=False)
         ctx = await browser.new_context(viewport={"width": 460, "height": 667})
         page = await ctx.new_page()
-
-        
 
         challenger = AsyncChallenger(page)
         for __ in range(3):
@@ -55,8 +51,6 @@ async def main():
                 await page.locator('input[type="text"]').fill(username)
                 await page.locator('input[type="password"]').fill(password)
                 await page.locator('input[type="password"]').press("Enter")
-
-                
 
                 if challenger.check_captcha_visible:
                     print("recapcha ....")
@@ -83,10 +77,10 @@ async def main():
                 print("load page")
                 await page.wait_for_timeout(5000)
                 await page.goto("https://app.golike.net/jobs/shopee")
-                
+
                 await page.wait_for_load_state("networkidle")
                 await page.wait_for_timeout(2000)
-                print('apply job')
+                print("apply job")
                 await page.get_by_text("Nhận Job ngay").click()
                 await page.wait_for_timeout(2000)
 

@@ -10,32 +10,34 @@ proxy_list = [
     "51.15.242.202:8888",
     "50.174.7.159:80",
     "50.223.239.166:80",
-    "50.173.140.149:80"
+    "50.173.140.149:80",
 ]
 
 
 def check_proxy(playwright: Playwright, proxy):
-        browser = playwright.chromium.launch(
+    browser = playwright.chromium.launch(
         headless=False,
         proxy={"server": proxy},
-        )
+    )
 
-        page = browser.new_page()
-        try:
-            page.goto('https://httpbin.org/ip')
-            ip_address = page.inner_text('#ip')
-            print(f"Proxy {proxy} IP: {ip_address}")
-            return True
-        except Exception as e:
-            print(f"Error occurred with proxy {proxy}: {e}")
-            return False
-        finally:
-            browser.close()
+    page = browser.new_page()
+    try:
+        page.goto("https://httpbin.org/ip")
+        ip_address = page.inner_text("#ip")
+        print(f"Proxy {proxy} IP: {ip_address}")
+        return True
+    except Exception as e:
+        print(f"Error occurred with proxy {proxy}: {e}")
+        return False
+    finally:
+        browser.close()
 
 
 def run(playwright: Playwright) -> None:
 
-    responsive_proxies = [proxy for proxy in proxy_list if check_proxy(playwright,proxy)]
+    responsive_proxies = [
+        proxy for proxy in proxy_list if check_proxy(playwright, proxy)
+    ]
     print(responsive_proxies)
 
     if not responsive_proxies:
