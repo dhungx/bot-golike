@@ -2,7 +2,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 
 
 def run(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(
+    browser = playwright.webkit.launch(
         headless=False,
         proxy={
             "server": "181.129.43.3:8080",
@@ -14,11 +14,12 @@ def run(playwright: Playwright) -> None:
         locale="de-DE",
         timezone_id="Europe/Berlin",
     )
+    
     page = context.new_page()
     page.goto("https://httpbin.org/ip")
     html_content = page.content()
     print(html_content)
-    page.wait_for_timeout(20000)
+    page.wait_for_timeout(200000)
 
     # ---------------------
     context.close()

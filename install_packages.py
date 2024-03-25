@@ -5,14 +5,8 @@ def install_packages():
     packages = [
         "playwright",
         "recognizer",
-        "python-dotenv",
-        "google",
-        "google-api-python-client",
-        "pytz",
-        "orm",
-        "asyncio",
-        "aiosqlite",
         "botright",
+        "asyncio"
     ]
     try:
         subprocess.run(["pip", "install", "--upgrade", "pip"], check=True)
