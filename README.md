@@ -52,7 +52,7 @@ Before you start, ensure you have the following prerequisites installed on your 
 1. **Run the bot golike shoppe :**
 
     ```bash
-    python3 shoppe.py
+    python3 shoppe.py [username] [password]
     ```
 
     Replace `shoppe.py` with the name of the script you want to execute.
