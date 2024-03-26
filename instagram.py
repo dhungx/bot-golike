@@ -4,9 +4,7 @@ from playwright.async_api import async_playwright
 import sys
 from playwright.sync_api import TimeoutError
 
-
 number_account = 0
-
 
 async def accountComplete(page, number_account):
     try:

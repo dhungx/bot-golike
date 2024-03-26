@@ -8,3 +8,4 @@ service_account_key.json
 bcdn.log
 __pycache__
 *.sh
+/extension
