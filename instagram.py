@@ -5,7 +5,8 @@ import sys
 from playwright.sync_api import TimeoutError
 
 
-async def accountComplete(page):
+number_account = 0
+async def accountComplete(page,number_account):
     try:
         await page.get_by_text("Hiện tại chưa có jobs mới,vui").click(timeout=5000)
         await page.get_by_role("button", name="OK").click(timeout=5000)
@@ -28,7 +29,6 @@ async def main():
     async with async_playwright() as p:
         browser = await p.webkit.launch(
             headless=False,
-            args=["--incognito"],
         )
         ctx = await browser.new_context(
             user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
@@ -78,13 +78,13 @@ async def main():
             try:
                 print("load page")
                 await page.wait_for_timeout(5000)
-                await page.goto("https://app.golike.net/jobs/shopee")
+                await page.goto("https://app.golike.net/jobs/Instagram")
                 await page.wait_for_timeout(2000)
                 await page.get_by_text("Nhận Job ngay").click()
                 await page.wait_for_timeout(2000)
 
                 async with page.expect_popup() as page1_info:
-                    await page.get_by_role("link", name="Trình duyệt").click()
+                    await page.get_by_role("link", name="Instagram").click()
 
                 page1 = await page1_info.value
                 await page1.wait_for_timeout(10000)
