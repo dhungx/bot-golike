@@ -14,12 +14,12 @@ def run(playwright: Playwright) -> None:
     page.goto("https://app.golike.net/login")
     page.locator('input[type="text"]').click()
     page.locator('input[type="text"]').click()
-    page.locator('input[type="text"]').fill("golang02")
+    page.locator('input[type="text"]').fill("giauphanbii")
     page.locator('input[type="text"]').press("Enter")
     page.locator('input[type="password"]').fill("giauvip12345")
     page.locator('input[type="password"]').press("Enter")
 
-    page.wait_for_timeout(20000)
+    page.wait_for_timeout(30000)
     for __ in range(5):
         element = page.get_by_text("Chọn tài khoảnKiếm Tiền").first
         element.click()
@@ -33,15 +33,14 @@ def run(playwright: Playwright) -> None:
                 name = account.locator("span").inner_text()
 
                 if number == account_number:
-                    print(name, number, account_number)
-                    page.get_by_text(name).click()
+                    # page.locator("span").filter(has_text=f"{name}check").locator("span").click() # change account shoppe
+                    page.get_by_text(f"{name}").click()
+                    account_number += 1
                 number += 1
-                print(name)
             except Exception as e:
-                print("e")
+                print(e)
 
-        page.wait_for_timeout(20000)
-        account_number += 1
+        
 
     # ---------------------
     context.close()

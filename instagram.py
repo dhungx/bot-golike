@@ -5,17 +5,32 @@ import sys
 from playwright.sync_api import TimeoutError
 
 
-number_account = 0
-
 
 async def accountComplete(page, number_account):
     try:
         await page.get_by_text("Hiện tại chưa có jobs mới,vui").click(timeout=5000)
         await page.get_by_role("button", name="OK").click(timeout=5000)
-        await page.get_by_role("heading", name="Kiếm Tiền chevron_right").click()
+        element = page.get_by_text("Chọn tài khoảnKiếm Tiền").first
+        element.click()
 
+        select_account = page.locator(".page-container .container").all()
+        print(len(select_account))
+
+        number = 0
+        for account in select_account:
+            try:
+                name = account.locator("span").inner_text()
+
+                if number == number_account:
+                    # page.locator("span").filter(has_text=f"{name}check").locator("span").click() # change account shoppe
+                    page.get_by_text(f"{name}").click()
+                    return True
+                number += 1
+            except Exception as e:
+                print(f"Error occurred change account: {e}")
+        return False
     except TimeoutError:
-        return True
+        return False
 
 
 async def check_captcha_visible(page):
@@ -29,6 +44,8 @@ async def check_captcha_visible(page):
 
 async def main():
     async with async_playwright() as p:
+        number_account = 0
+
         browser = await p.webkit.launch(
             headless=False,
         )
@@ -60,31 +77,38 @@ async def main():
                     print("recapcha ....")
                     await page.wait_for_timeout(2000)
                     await challenger.solve_recaptcha()
-
+                    
+                await page.wait_for_timeout(2000)
                 break
 
+            except TimeoutError:
+                return False
+            
             except RecursionError as e:
                 print(f"RecursionError occurred: {e}")
                 break
 
             except Exception as e:
                 print(f"Error occurred: {e}")
-                if "Invisible reCaptcha Timed Out." in str(e):
-                    break
-                else:
-                    await page.reload()
+                await page.reload()
 
         await page.reload()
         print("success login")
         while True:
             try:
-                print("load page")
+                print(f"load page - account number: {number_account}")
                 await page.wait_for_timeout(5000)
                 await page.goto("https://app.golike.net/jobs/Instagram")
                 await page.wait_for_timeout(2000)
                 await page.get_by_text("Nhận Job ngay").click()
+                change_account = await accountComplete(page,number_account)
+                if change_account:
+                    number_account += 1
+                else:
+                    number_account = 0
                 await page.wait_for_timeout(2000)
 
+                print("apply job")
                 async with page.expect_popup() as page1_info:
                     await page.get_by_role("link", name="Instagram").click()
 
