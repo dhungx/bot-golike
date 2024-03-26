@@ -6,7 +6,9 @@ from playwright.sync_api import TimeoutError
 
 
 number_account = 0
-async def accountComplete(page,number_account):
+
+
+async def accountComplete(page, number_account):
     try:
         await page.get_by_text("Hiện tại chưa có jobs mới,vui").click(timeout=5000)
         await page.get_by_role("button", name="OK").click(timeout=5000)
