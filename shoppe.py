@@ -1,44 +1,24 @@
 import asyncio
-from recognizer.agents.playwright import AsyncChallenger
-from playwright.async_api import async_playwright
 import sys
-from playwright.sync_api import TimeoutError
-
-
-async def accountComplete(page):
-    try:
-        await page.get_by_text("Hiện tại chưa có jobs mới,vui").click(timeout=5000)
-        await page.get_by_role("button", name="OK").click(timeout=5000)
-        await page.get_by_role("heading", name="Kiếm Tiền chevron_right").click()
-
-    except TimeoutError:
-        return True
-
-
-async def check_captcha_visible(page):
-    captcha_frame = page.frame_locator("//iframe[contains(@src,'bframe')]")
-    label_obj = captcha_frame.locator("//strong")
-    try:
-        await label_obj.wait_for(state="visible", timeout=10000)
-    except TimeoutError:
-        return False
+from playwright.async_api import async_playwright
+from recognizer.agents.playwright import AsyncChallenger
 
 
 async def main():
     async with async_playwright() as p:
 
         if len(sys.argv) != 3:
-            print("Usage: python3 shopee.py [username] [password] [proxy]")
-            sys.exit(1)
+            print("Usage: python3 shopee.py [username] [password]")
+            return
+
         username = sys.argv[1]
         password = sys.argv[2]
-        proxy = sys.argv[3] if len(sys.argv) == 4 else None
 
-        if proxy:
-            browser = await p.webkit.launch(headless=False, proxy={"server": proxy})
-        else:
-            browser = await p.webkit.launch(headless=False)
-        ctx = await browser.new_context(viewport={"width": 460, "height": 667})
+        browser = await p.chromium.launch(headless=True)
+        ctx = await browser.new_context(
+            user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
+            viewport={"width": 460, "height": 667},
+        )
         page = await ctx.new_page()
 
         challenger = AsyncChallenger(page)
@@ -52,11 +32,10 @@ async def main():
                 await page.locator('input[type="password"]').fill(password)
                 await page.locator('input[type="password"]').press("Enter")
 
-                if challenger.check_captcha_visible:
+                if await challenger.check_captcha_visible():
                     print("recapcha ....")
                     await page.wait_for_timeout(2000)
                     await challenger.solve_recaptcha()
-
                 break
 
             except RecursionError as e:
@@ -104,7 +83,6 @@ async def main():
                 print(f"Error occurred: {e}")
 
         await browser.close()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
