@@ -40,8 +40,6 @@ def run(playwright: Playwright) -> None:
             except Exception as e:
                 print(e)
 
-        
-
     # ---------------------
     context.close()
     browser.close()

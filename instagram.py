@@ -5,7 +5,6 @@ import sys
 from playwright.sync_api import TimeoutError
 
 
-
 async def accountComplete(page, number_account):
     try:
         await page.get_by_text("Hiện tại chưa có jobs mới,vui").click(timeout=5000)
@@ -77,13 +76,13 @@ async def main():
                     print("recapcha ....")
                     await page.wait_for_timeout(2000)
                     await challenger.solve_recaptcha()
-                    
+
                 await page.wait_for_timeout(2000)
                 break
 
             except TimeoutError:
                 return False
-            
+
             except RecursionError as e:
                 print(f"RecursionError occurred: {e}")
                 break
@@ -101,7 +100,7 @@ async def main():
                 await page.goto("https://app.golike.net/jobs/Instagram")
                 await page.wait_for_timeout(2000)
                 await page.get_by_text("Nhận Job ngay").click()
-                change_account = await accountComplete(page,number_account)
+                change_account = await accountComplete(page, number_account)
                 if change_account:
                     number_account += 1
                 else:
